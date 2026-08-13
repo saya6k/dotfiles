@@ -40,3 +40,15 @@ When asked to publish a HTML File: Upload it as a private GitHub Gist, then it's
 ```bash
 gh gist create architecture.html
 ```
+
+## Docker testing on my Mac
+
+Only applies on macOS. Inside a dev container or Codespace, use `docker` directly.
+
+This Mac (Apple M1) cannot use nested virtualization (requires M3+). For any Docker testing, use the pre-configured container machine `linux-test` (Apple `container` CLI; Alpine 3.22, 4 CPU/8G, Docker 28.3.3 + compose):
+
+- dockerd does not auto-start — after machine (re)boot run: `container machine run --root -n linux-test -- sh /Users/saya6k/Projects/apple-container/machine/start-docker.sh`
+- Then: `container machine run --root -n linux-test -- docker ...` (`--root` required)
+- Caveat: `machine run -- sh -c "a && b"` breaks quoting — run compound commands via script files under the home mount
+- Caveat: `ubuntu:24.04` won't boot as a machine (init exit 127) — use Alpine for machines
+- Caveat: run `machine run` sessions one at a time. Two concurrent sessions corrupt each other's output (it looks like broken shell quoting) and can kill the running peer with SIGTERM (exit 143). While a long build or test is running, don't start a second `machine run` — read its background output file instead, or chain the steps into a single invocation.
