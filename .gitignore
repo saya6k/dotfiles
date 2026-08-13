@@ -1,0 +1,4 @@
+# Agent scratch state, not part of the dotfiles
+.agents/
+
+.DS_Store

@@ -1,0 +1,14 @@
+#!/bin/bash
+# Build a dev container image and run install.sh inside it.
+#
+# On this Mac Docker runs in the `linux-test` container machine, so prefix the
+# docker calls:
+#   container machine run --root -n linux-test -- docker build ...
+set -e
+cd "$(dirname "$0")/.."
+
+docker build . -t dotfiles -f test/Dockerfile.test --force-rm
+
+docker run --rm -it dotfiles
+
+docker rmi dotfiles

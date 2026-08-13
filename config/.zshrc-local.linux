@@ -1,0 +1,9 @@
+# fzf
+[ -f /usr/share/doc/fzf/examples/key-bindings.zsh ] && source /usr/share/doc/fzf/examples/key-bindings.zsh
+
+# OpenCode
+export PATH="$HOME/.opencode/bin:$PATH"
+
+# NVM (installed by install-linux.sh)
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"

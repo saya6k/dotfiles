@@ -1,0 +1,9 @@
+# Test image to see if install.sh works on a dev container base.
+FROM mcr.microsoft.com/devcontainers/python:3.12
+
+WORKDIR /workspaces
+
+COPY . /root/dotfiles
+RUN /root/dotfiles/install.sh
+
+CMD ["zsh"]
