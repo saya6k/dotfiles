@@ -1,0 +1,54 @@
+---
+name: CI
+'on':
+  pull_request:
+    paths-ignore:
+      - '*.md'
+  push:
+    paths-ignore:
+      - '*.md'
+    branches:
+      - main
+  schedule:
+    - cron: "0 5 * * 4"
+  workflow_dispatch:
+
+jobs:
+
+  shellcheck:
+    name: ShellCheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Lint shell scripts.
+        run: shellcheck *.sh test/run_test
+
+  linux:
+    name: Linux (dev container)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      # Same image test/run_test builds locally: runs install.sh during build.
+      - name: Build test image.
+        run: docker build . -f test/Dockerfile.test --force-rm
+
+  macos:
+    name: macOS
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v7
+
+      # Casks are large GUI apps and Mac App Store installs need a signed-in
+      # account, so CI installs formulae only.
+      - name: Skip casks and Mac App Store apps.
+        run: |
+          echo "HOMEBREW_BUNDLE_CASK_SKIP=$(brew bundle list --cask --file Brewfile | xargs)" >> "$GITHUB_ENV"
+          echo "HOMEBREW_BUNDLE_MAS_SKIP=$(grep -oE 'id: [0-9]+' Brewfile | cut -d' ' -f2 | xargs)" >> "$GITHUB_ENV"
+
+      - name: Run install.sh.
+        run: ./install.sh
+
+      - name: Run install.sh again (re-run safety).
+        run: ./install.sh
