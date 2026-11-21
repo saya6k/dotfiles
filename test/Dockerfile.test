@@ -5,5 +5,6 @@ WORKDIR /workspaces
 
 COPY . /root/dotfiles
 RUN /root/dotfiles/install.sh
+RUN /root/dotfiles/test/check_zsh
 
 CMD ["zsh"]

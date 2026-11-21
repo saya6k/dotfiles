@@ -1,5 +1,6 @@
-# fzf
-[ -f /usr/share/doc/fzf/examples/key-bindings.zsh ] && source /usr/share/doc/fzf/examples/key-bindings.zsh
+# fzf (key bindings need a TTY; without one, e.g. `docker exec` without -t,
+# sourcing them errors with "can't change option: zle")
+[ -t 0 ] && [ -f /usr/share/doc/fzf/examples/key-bindings.zsh ] && source /usr/share/doc/fzf/examples/key-bindings.zsh
 
 # OpenCode
 export PATH="$HOME/.opencode/bin:$PATH"

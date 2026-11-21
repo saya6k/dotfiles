@@ -22,7 +22,7 @@ jobs:
       - uses: actions/checkout@v7
 
       - name: Lint shell scripts.
-        run: shellcheck *.sh test/run_test
+        run: shellcheck *.sh test/run_test test/check_zsh
 
   linux:
     name: Linux (dev container)
@@ -52,3 +52,6 @@ jobs:
 
       - name: Run install.sh again (re-run safety).
         run: ./install.sh
+
+      - name: Check zsh loads the installed config.
+        run: test/check_zsh

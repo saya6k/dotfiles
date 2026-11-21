@@ -1,0 +1,14 @@
+#!/bin/bash
+# Fail if an interactive zsh errors or prints to stderr while loading the
+# installed config (~/.zshrc, ~/.zshrc-local, Oh My Zsh).
+
+status=0
+err=$(DISABLE_AUTO_UPDATE=true zsh -i -c exit 2>&1 >/dev/null) || status=$?
+
+if [ "$status" -ne 0 ] || [ -n "$err" ]; then
+    echo "zsh failed to load cleanly (exit $status):"
+    echo "$err"
+    exit 1
+fi
+
+echo "zsh config loaded cleanly"
