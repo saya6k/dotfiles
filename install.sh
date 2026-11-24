@@ -70,13 +70,11 @@ echo
 echo "** Installing uv"
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# AI agent config (Claude Code & OpenCode)
+# AI agent config (Claude Code)
 echo
 echo "** Setting up AI agent config"
-mkdir -p ~/.claude ~/.config/opencode
+mkdir -p ~/.claude
 link "$DOTFILES_DIR/config/AGENTS.md" ~/.claude/CLAUDE.md
-link "$DOTFILES_DIR/config/AGENTS.md" ~/.config/opencode/AGENTS.md
-link "$DOTFILES_DIR/config/opencode.json" ~/.config/opencode/opencode.json
 
 # Claude Code settings. ~/.claude/settings.json is also written by Claude Code
 # itself (/config, /model, plugin installs) and holds machine-only keys, so
