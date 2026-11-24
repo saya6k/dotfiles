@@ -38,8 +38,3 @@ nvm use --lts
 echo
 echo "** Installing Claude Code"
 curl -fsSL https://claude.ai/install.sh | bash
-
-# OpenCode
-echo
-echo "** Installing OpenCode"
-curl -fsSL https://opencode.ai/install | bash
