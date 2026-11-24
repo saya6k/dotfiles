@@ -10,16 +10,18 @@ sudo -n DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommend
 
 sudo -n chsh "$(whoami)" -s "$(which zsh)"
 
-# GH CLI
+# GH CLI from the official apt repo. Looking up the latest release through
+# the GitHub API hit the unauthenticated rate limit on shared CI runners.
 echo
-echo "** Downloading GitHub CLI"
-ARCH=$(dpkg --print-architecture)
-curl -s https://api.github.com/repos/cli/cli/releases/latest \
-  | jq -r ".assets[] | select(.name | endswith(\"_linux_${ARCH}.deb\")).browser_download_url" \
-  | xargs curl -O -L
-
-sudo -n dpkg -i ./gh_*_linux_"${ARCH}".deb
-rm ./gh_*_linux_"${ARCH}".deb
+echo "** Installing GitHub CLI"
+KEYRING=/etc/apt/keyrings/githubcli-archive-keyring.gpg
+sudo -n mkdir -p -m 755 /etc/apt/keyrings
+curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo -n tee "$KEYRING" > /dev/null
+sudo -n chmod go+r "$KEYRING"
+echo "deb [arch=$(dpkg --print-architecture) signed-by=$KEYRING] https://cli.github.com/packages stable main" \
+  | sudo -n tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+sudo -n apt-get update
+sudo -n DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends gh
 
 # NVM/Node.js (PROFILE=/dev/null prevents nvm from modifying shell config)
 echo
