@@ -24,6 +24,15 @@ jobs:
       - name: Lint shell scripts.
         run: shellcheck *.sh test/run_test test/check_zsh
 
+  hooks:
+    name: Claude Code hooks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Test korean-guard hook.
+        run: python3 test/test_korean_guard.py
+
   linux:
     name: Linux (dev container)
     runs-on: ubuntu-latest

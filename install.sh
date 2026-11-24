@@ -78,5 +78,32 @@ link "$DOTFILES_DIR/config/AGENTS.md" ~/.claude/CLAUDE.md
 link "$DOTFILES_DIR/config/AGENTS.md" ~/.config/opencode/AGENTS.md
 link "$DOTFILES_DIR/config/opencode.json" ~/.config/opencode/opencode.json
 
+# Korean guard hook: makes Claude Code rewrite English-heavy replies in Korean.
+# settings.json is machine-owned, so only add the two hook entries if missing.
+mkdir -p ~/.claude/hooks
+link "$DOTFILES_DIR/config/claude/hooks/korean-guard.py" ~/.claude/hooks/korean-guard.py
+python3 - <<'EOF'
+import json, os
+path = os.path.expanduser("~/.claude/settings.json")
+settings = json.load(open(path)) if os.path.exists(path) else {}
+cmd = "~/.claude/hooks/korean-guard.py"
+wanted = {
+    "Stop": {"hooks": [{"type": "command", "command": cmd}]},
+    "PreToolUse": {"matcher": "mcp__.*__wrap_up", "hooks": [{"type": "command", "command": cmd}]},
+}
+hooks = settings.setdefault("hooks", {})
+changed = False
+for event, entry in wanted.items():
+    groups = hooks.setdefault(event, [])
+    if not any(h.get("command") == cmd for g in groups for h in g.get("hooks", [])):
+        groups.append(entry)
+        changed = True
+if changed:
+    with open(path, "w") as f:
+        json.dump(settings, f, indent=2, ensure_ascii=False)
+        f.write("\n")
+    print("Registered korean-guard hook in " + path)
+EOF
+
 echo
 echo -e "${GREEN}** Done${NC}"
