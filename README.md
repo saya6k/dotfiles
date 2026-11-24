@@ -24,11 +24,11 @@ git clone https://github.com/saya6k/dotfiles.git ~/Projects/dotfiles
 `install.sh` is safe to re-run. Any real file it is about to replace with a symlink
 is moved to `<name>.bak` first, and an existing Oh My Zsh install is left alone.
 
-`install.sh` also installs a Claude Code hook (`config/claude/hooks/korean-guard.py`)
-that sends a reply back for a Korean rewrite when it comes out mostly in English. It adds
-`Stop` and `PreToolUse` entries to `~/.claude/settings.json` if they are not there yet. It is a
-Korean port of [claude-code-japanese-guard](https://github.com/minorun365/claude-code-japanese-guard)
-(Apache-2.0). Set `KOREAN_GUARD_DISABLE=1` to turn it off for `claude -p` scripts.
+### AI agent config
+
+- `config/AGENTS.md` is the one instruction file for every agent. It is linked to `~/.claude/CLAUDE.md` (Claude Code reads only that file at user level, not `~/.agents/`) and to `~/.config/opencode/AGENTS.md`.
+- `config/claude/settings.json` holds the Claude Code settings shared across machines. `install.sh` merges it into `~/.claude/settings.json` instead of linking, because Claude Code writes that file itself and it also holds machine-only keys such as `autoMode`. Keys in the repo file win on every run, lists only gain missing items, and every other key is left alone.
+- `config/claude/hooks/korean-guard.py` sends a reply back for a Korean rewrite when it comes out mostly in English. It is a Korean port of [claude-code-japanese-guard](https://github.com/minorun365/claude-code-japanese-guard) (Apache-2.0). Set `KOREAN_GUARD_DISABLE=1` to turn it off for `claude -p` scripts.
 
 System preferences are not applied automatically:
 
