@@ -41,6 +41,9 @@ link "$DOTFILES_DIR/config/.gitignore" ~/.gitignore
 
 # Run platform-specific installer
 if [[ "$OSTYPE" == "darwin"* ]]; then
+    # Before install-macos.sh so brew bundle already reads it
+    mkdir -p ~/.homebrew
+    link "$DOTFILES_DIR/config/homebrew/brew.env" ~/.homebrew/brew.env
     source "$DOTFILES_DIR/install-macos.sh"
 else
     source "$DOTFILES_DIR/install-linux.sh"
