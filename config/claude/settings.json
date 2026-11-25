@@ -9,7 +9,8 @@
   "agentPushNotifEnabled": true,
   "enabledPlugins": {
     "clangd-lsp@claude-plugins-official": true,
-    "agent-skills@addy-agent-skills": true
+    "agent-skills@addy-agent-skills": true,
+    "claude-md-management@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "addy-agent-skills": {
