@@ -59,5 +59,3 @@ cc-zai() {
     CLAUDE_CODE_EFFORT_LEVEL="max" \
     claude "$@"
 }
-
-. "$HOME/.local/bin/env"

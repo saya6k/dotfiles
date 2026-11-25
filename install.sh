@@ -71,7 +71,9 @@ fi
 # uv
 echo
 echo "** Installing uv"
-curl -LsSf https://astral.sh/uv/install.sh | sh
+# .zshrc already puts ~/.local/bin on PATH; without this the installer appends
+# a line to the symlinked ~/.zshrc, i.e. to config/.zshrc in this repo.
+curl -LsSf https://astral.sh/uv/install.sh | UV_NO_MODIFY_PATH=1 sh
 
 # AI agent config (Claude Code)
 echo
