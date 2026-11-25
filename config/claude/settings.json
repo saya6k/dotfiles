@@ -7,6 +7,9 @@
   "switchModelsOnFlag": false,
   "skipWorkflowUsageWarning": true,
   "agentPushNotifEnabled": true,
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_CODE_MODE": "1"
+  },
   "enabledPlugins": {
     "clangd-lsp@claude-plugins-official": true
   },
