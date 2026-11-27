@@ -1,9 +1,7 @@
 #!/bin/bash
 # Build a dev container image and run install.sh inside it.
 #
-# On this Mac Docker runs in the `linux-test` container machine, so prefix the
-# docker calls:
-#   container machine run --root -n linux-test -- docker build ...
+# On a Mac `docker` talks to socktainer (see config/AGENTS.md), so this runs as is.
 set -e
 cd "$(dirname "$0")/.."
 
