@@ -102,4 +102,12 @@ This Mac (Apple M1) cannot use nested virtualization (requires M3+) and has no D
 - `docker build` hangs with `no host or :authority header present` when the builder is `container-builder-shim` 0.13.3+. socktainer 1.6.1 is built against container 1.6.1, whose builder client only works with shim <= 0.13.2, so `~/.config/container/config.toml` pins `[build] image` to 0.13.2 (applied after `container system stop && container system start`, then `container builder delete --force`). Drop the pin once a socktainer release is built against container >= 1.7.1.
 - Containers have no outbound network while NordVPN is connected (DNS resolves, every connection times out). Disconnect it before builds or package installs.
 - `--network host` is accepted but each container still gets its own VM IP, so containers cannot share `127.0.0.1` and there is no `docker0`. `--network none` still leaves an `eth0`.
-- The `linux-test` container machine (Alpine) no longer has Docker. If a test needs one shared dockerd (host networking between containers, `docker0`, one kernel), reinstall it there with `/Users/saya6k/Projects/apple-container/machine/setup-docker.sh`.
+- If a test needs several processes on one network (shared `127.0.0.1`, host networking), run them in one container, or run them directly in `linux-test` (below).
+
+Use the `linux-test` container machine (Alpine 3.22) only when a full Linux VM is needed rather than a container. It has no Docker on purpose; never install Docker in it.
+
+- Run commands with `container machine run --root -n linux-test -- ...`. The Mac home is mounted at its real path; `$HOME` inside is `/root`.
+- Caveat: `machine run -- sh -c "a && b"` breaks quoting — run compound commands via script files under the home mount
+- Caveat: `ubuntu:24.04` won't boot as a machine (init exit 127) — use Alpine for machines
+- Caveat: run `machine run` sessions one at a time. Two concurrent sessions corrupt each other's output (it looks like broken shell quoting) and can kill the running peer with SIGTERM (exit 143). While a long run is going, don't start a second `machine run` — read its background output file instead, or chain the steps into a single invocation.
+- Space freed inside the machine returns to the Mac only after `fstrim -v /` inside it.
