@@ -8,3 +8,6 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 # NVM (installed via Brewfile)
 export NVM_DIR="$HOME/.nvm"
 [ -s /opt/homebrew/opt/nvm/nvm.sh ] && \. /opt/homebrew/opt/nvm/nvm.sh
+
+# Docker CLI -> socktainer (Docker Engine API on Apple container; brew service)
+export DOCKER_HOST="unix:///opt/homebrew/var/run/socktainer/.socktainer/container.sock"
