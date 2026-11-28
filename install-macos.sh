@@ -24,6 +24,15 @@ fi
 echo -e "\n${GREEN}Installing Homebrew packages from Brewfile...${NC}"
 brew bundle --file="$DOTFILES_DIR/Brewfile"
 
+# Start menu bar utilities at login; skip apps that are already login items
+login_items=$(osascript -e 'tell application "System Events" to get the name of every login item')
+for app in "Caffeine" "Hidden Bar"; do
+    if [ -d "/Applications/$app.app" ] && ! grep -qF "$app" <<< "$login_items"; then
+        osascript -e "tell application \"System Events\" to make login item at end with properties {path:\"/Applications/$app.app\", hidden:false}" > /dev/null
+        echo -e "${GREEN}Added $app to login items${NC}"
+    fi
+done
+
 # Claude Code
 echo -e "\n${GREEN}Installing Claude Code...${NC}"
 curl -fsSL https://claude.ai/install.sh | bash
